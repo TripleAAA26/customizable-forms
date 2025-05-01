@@ -1,11 +1,15 @@
+'use client'
+
 import { MdPreview } from 'react-icons/md'
 
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import useDesigner from '@/components/hooks/useDesigner'
 import { FormElements } from '@/components/FormElements'
+import { useTranslations } from 'next-intl'
 
 export default function PreviewDialogButton() {
+    const t = useTranslations('BuilderPage.PreviewDialogButtonComponent')
     const { elements } = useDesigner()
 
     return (
@@ -13,7 +17,7 @@ export default function PreviewDialogButton() {
             <DialogTrigger asChild>
                 <Button variant='outline' className='gap-2'>
                     <MdPreview className='!h-6 !w-6' />
-                    Preview
+                    {t('preview-button')}
                 </Button>
             </DialogTrigger>
             <DialogContent
@@ -22,10 +26,10 @@ export default function PreviewDialogButton() {
                 <div className='px-4 py-2 border-b'>
                     <DialogTitle />
                     <p className='text-lg font-bold text-muted-foreground'>
-                        Form preview
+                        {t('preview-dialog-title')}
                     </p>
                     <p className='text-sm text-muted-foreground'>
-                        This is how your form will look like to your users.
+                        {t('preview-dialog-description')}
                     </p>
                 </div>
                 <div

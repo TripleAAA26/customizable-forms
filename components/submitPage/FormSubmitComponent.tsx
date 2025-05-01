@@ -8,11 +8,13 @@ import { toast } from 'sonner'
 import { FormElementInstance, FormElements } from '@/components/FormElements'
 import { Button } from '@/components/ui/button'
 import { SubmitForm } from '@/actions/form'
+import { useTranslations } from 'next-intl'
 
-export default function FormSubmitComponent({ formUrl, content }: { formUrl: string; content: FormElementInstance[] }) {
+export default function FormSubmitComponent({ formId, formUrl, content }: { formId: number, formUrl: string, content: FormElementInstance[] }) {
     const formValues = useRef<{ [key: string]: string }>({})
     const formError = useRef<{ [key: string]: boolean }>({})
     const [renderKey, setRenderKey] = useState(new Date().getTime())
+    const t = useTranslations('SubmitPage')
 
     const [submitted, setSubmitted] = useState(false)
 
@@ -34,7 +36,7 @@ export default function FormSubmitComponent({ formUrl, content }: { formUrl: str
     function submitValue(key: string, value: string) {
         formValues.current[key] = value
     }
-    
+
     async function submitForm() {
         formError.current = {}
         const validForm = validateForm()
@@ -45,8 +47,8 @@ export default function FormSubmitComponent({ formUrl, content }: { formUrl: str
         }
         
         try {
-            const jsonContent = JSON.stringify(formValues.current)
-            await SubmitForm(formUrl, jsonContent)
+            const content = Object.entries(formValues.current)
+            await SubmitForm(formId, formUrl, content)
             setSubmitted(true)
         } catch (error) {
             toast.error('Error', { description: 'Something went wrong' })
@@ -60,9 +62,9 @@ export default function FormSubmitComponent({ formUrl, content }: { formUrl: str
                     className='max-w-[620px] flex flex-col gap-4 flex-grow bg-background w-full p-8
                     overflow-y-auto border shadow-xl shadow-blue-700 rounded'
                 >
-                    <h1 className='text-2xl font-bold'>Form submitted</h1>
+                    <h1 className='text-2xl font-bold'>{t('submitted-title')}</h1>
                     <p className='text-muted-foreground'>
-                        Thank you for submitting the form, you can close this page.
+                        {t('submitted-description')}
                     </p>
                 </div>
             </div>
@@ -98,7 +100,7 @@ export default function FormSubmitComponent({ formUrl, content }: { formUrl: str
                     {!pending &&
                         <>
                             <HiCursorClick className='mr-2' />
-                            Submit
+                            {t('submit-button')}
                         </>
                     }
                     {pending && <ImSpinner2 className='animate-spin' />}

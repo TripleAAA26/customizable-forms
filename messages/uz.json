@@ -1,5 +1,122 @@
 {
+  "AdminPage": {
+    "title": "Admin boshqaruv paneli",
+    "filter": "Emaillarni filtrlash...",
+    "button-prev": "Oldingi",
+    "button-next": "Keyingi",
+    "empty-table": "Natijalar yo'q"
+  },
   "HomePage": {
     "title": "Sizing formalaringiz"
+  },
+  "PersonalPage": {
+    "total-visits-title": "Jami tashriflar",
+    "total-visits-helper": "Barcha vaqt shakli tashriflari",
+    "total-submissions-title": "Jami topshirishlar",
+    "total-submissions-helper": "Barcha vaqt topshirishlar",
+    "submission-rate-title": "Topshirishlar darajasi",
+    "submission-rate-helper": "Topshirishga sabab tashriflar natijasi",
+    "bounce-rate-title": "Qaytish darajasi",
+    "bounce-rate-helper": "Topshirmasdan ketadigan tashriflar",
+    "create-form-button": "Yangi forma yaratish",
+    "create-dialog-title": "Forma yaratish",
+    "create-dialog-header-description": "Javoblarni yig'ishni boshlash uchun yangi forma yarating",
+    "create-dialog-name": "Nomi",
+    "create-dialog-description": "Tavsifi",
+    "create-dialog-save-button": "Saqlash",
+    "published-badge": "Nashr etilgan",
+    "draft-badge": "Qoralama",
+    "view-submissions-button": "Taqdimotlarni ko'rish",
+    "edit-form-button": "Formani tahrirlash"
+  },
+  "BuilderPage": {
+    "formBuilderComponent": {
+      "form": "Forma",
+      "form-published": "Forma chop etildi",
+      "share-from": "Formani ulashish",
+      "share-description": "Hamme shu link orqali topshirish mumkin",
+      "copy-link-button": "Linkni nusxalash",
+      "back-home-button": "Uyga qaytish",
+      "form-details-button": "Forma detallari"
+    },
+    "publishFormButtonComponent": {
+      "dialog-trigger": "E'lon qilish",
+      "dialog-title": "Siz mutlaqo aminmisiz?",
+      "dialog-description-first": "Bu amalni ortga qaytarib bo‘lmaydi. Nashr qilganingizdan keyin siz ushbu shaklni tahrirlay olmaysiz.",
+      "dialog-description-second": "Ushbu shaklni nashr qilish orqali siz uni ommaga taqdim etasiz va arizalarni to'plashingiz mumkin bo'ladi.",
+      "dialog-cancel": "Bekor qilish",
+      "dialog-action-proceed": "Davom etish"
+    },
+    "SaveFormButtonComponent": {
+      "save-button": "Saqlash"
+    },
+    "PreviewDialogButtonComponent": {
+      "preview-button": "Oldindan ko'rish",
+      "preview-dialog-title": "Formani oldindan ko'rish",
+      "preview-dialog-description": "Sizning formangiz foydalanuvchilarga shunday ko'rinadi."
+    },
+    "designerComponent": {
+      "drop-here": "Shu yerga tashla"
+    },
+    "designerElementWrapperComponent": {
+      "over-text": "Xususiyatlar uchun bosing yoki harakatlantirish uchun torting"
+    },
+    "propertiesFormSideBarComponent": {
+      "element-properties": "Element xususiyatlari"
+    },
+    "formElementsSideBarComponent": {
+      "drag-drop": "Elementlarni sudrab olib tashlang",
+      "layout-elements": "Joylashtirish elementlari",
+      "form-elements": "Forma elementlari"
+    }
+  },
+  "Fields": {
+    "Checkbox field": "Belgilash maydoni",
+    "Helper text": "Yordamchi tekst",
+    "Date field": "Sana maydoni",
+    "Pick a date": "Sanani tanlang",
+    "Number field": "Raqam maydoni",
+    "Text here": "Tekst bu yerga",
+    "Paragraph field": "Paragraf maydoni",
+    "Select field": "Tanlash maydoni",
+    "Value here": "Qiymat bu yerga",
+    "Separator field": "Ajratuvchi maydoni",
+    "Spacer field": "Masofa maydoni",
+    "SubTitle field": "Kichik sarlavha",
+    "TextArea field": "Tekstlar maydoni",
+    "Text field": "Tekst maydoni",
+    "Title field": "Sarlavha maydoni",
+
+
+    "propertiesComponent": {
+      "form-label": "Yorliq",
+      "form-description-first": "Maydon yorlig'i.",
+      "form-description-second": "U maydonning tepasida ko'rsatiladi.",
+      "form-helper-text-label": "Yordamchi tekst",
+      "form-helper-description-first": "Maydonning yordamchi matni.",
+      "form-helper-description-second": "U maydon ostida ko'rsatiladi.",
+      "form-required-label": "Talab qilinadi",
+      "form-required-description": "Maydonning to'ldiruvchisi.",
+      "form-placeholder-label": "Joy egasi",
+      "form-placeholder-description": "Maydonning to'ldiruvchisi.",
+      "form-text": "Tekst",
+      "form-options-label": "variantlar",
+      "form-options-button": "Qo'shish",
+      "form-save-button": "Saqlash",
+      "no-properties": "Ushbu element uchun xususiyatlar yo'q",
+      "form-height": "Balandlik",
+      "form-title": "Sarlavha",
+      "form-rows": "Qatorlar"
+    }
+  },
+  "FormsPage": {
+    "share-link-button": "Link bo'lashish",
+    "visit-button": "Kirish",
+    "submissions": "Topshirishlar"
+  },
+  "SubmitPage": {
+    "submitted-title": "Forma topshirildi",
+    "submitted-description": "Formani yuborganingiz uchun tashakkur, bu sahifani yopishingiz mumkin.",
+    "submit-button": "Yuborish"
   }
 }

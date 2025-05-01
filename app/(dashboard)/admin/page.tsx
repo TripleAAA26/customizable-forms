@@ -3,6 +3,7 @@ import { clerkClient } from '@clerk/nextjs/server'
 import { checkRole } from '@/lib/roles'
 import { DataTable } from '@/components/adminPage/data-table'
 import { columns, UserList } from '@/components/adminPage/columns'
+import { getTranslations } from 'next-intl/server'
 
 
 export default async function AdminDashboard() {
@@ -10,6 +11,8 @@ export default async function AdminDashboard() {
     if (!isAdmin) {
         redirect('/')
     }
+
+    const t = await getTranslations('AdminPage')
 
     const client = await clerkClient()
     const users =(await client.users.getUserList()).data || []
@@ -25,7 +28,7 @@ export default async function AdminDashboard() {
 
     return (
         <div className='container pt-4'>
-            <p className='text-2xl font-bold'>Admin Dashboard</p>
+            <p className='text-2xl font-bold'>{t('title')}</p>
 
             <DataTable columns={columns} data={realData} />
         </div>

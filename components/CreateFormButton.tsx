@@ -12,7 +12,6 @@ import {
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -25,16 +24,17 @@ import { ImSpinner2 } from 'react-icons/im'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { Label } from '@/components/ui/label'
 import { toast } from 'sonner'
 import { formSchema, formSchemaType } from '@/schemas/form'
 import { CreateForm } from '@/actions/form'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
 
 
 export default function CreateFormButton() {
     const router = useRouter()
+    const t = useTranslations('PersonalPage')
     const form = useForm<formSchemaType>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -64,15 +64,15 @@ export default function CreateFormButton() {
                 >
                     <BsFileEarmarkPlus className='!h-8 !w-8 text-muted-foreground group-hover:text-primary' />
                     <p className='font-bold text-xl text-muted-foreground group-hover:text-primary'>
-                        Create new form
+                        {t('create-form-button')}
                     </p>
                 </Button>
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Create form</DialogTitle>
+                    <DialogTitle>{t('create-dialog-title')}</DialogTitle>
                     <DialogDescription>
-                        Create a new form to start collecting responses
+                        {t('create-dialog-header-description')}
                     </DialogDescription>
                 </DialogHeader>
                 <Form {...form}>
@@ -82,7 +82,7 @@ export default function CreateFormButton() {
                             name='name'
                             render={({field}) => (
                                 <FormItem>
-                                    <FormLabel>Name</FormLabel>
+                                    <FormLabel>{t('create-dialog-name')}</FormLabel>
                                     <FormControl>
                                         <Input {...field} />
                                     </FormControl>
@@ -95,7 +95,7 @@ export default function CreateFormButton() {
                             name='description'
                             render={({field}) => (
                                 <FormItem>
-                                    <FormLabel>Description</FormLabel>
+                                    <FormLabel>{t('create-dialog-description')}</FormLabel>
                                     <FormControl>
                                         <Textarea
                                             className='field-sizing-fixed'
@@ -115,7 +115,7 @@ export default function CreateFormButton() {
                         className='w-full mt-4'
                         disabled={form.formState.isSubmitting}
                     >
-                        {!form.formState.isSubmitting && <span>Save</span>}
+                        {!form.formState.isSubmitting && <span>{t('create-dialog-save-button')}</span>}
                         {form.formState.isSubmitting && <ImSpinner2 className='animate-spin' />}
                     </Button>
                 </DialogFooter>

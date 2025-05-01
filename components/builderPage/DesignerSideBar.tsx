@@ -1,6 +1,6 @@
 import useDesigner from '@/components/hooks/useDesigner'
-import FormElementsSideBar from '@/components/FormElementsSideBar'
-import PropertiesFormSideBar from '@/components/PropertiesFormSideBar'
+import FormElementsSideBar from '@/components/builderPage/FormElementsSideBar'
+import PropertiesFormSideBar from '@/components/builderPage/PropertiesFormSideBar'
 
 export default function DesignerSideBar() {
     const { selectedElement } = useDesigner()

@@ -26,7 +26,30 @@ export type ElementsType =
 export type FormElementInstance = {
     id: string
     type: ElementsType
-    extraAttributes?: Record<string, any>
+    formId: number
+
+    title?: string
+    text?: string
+    height?: number
+    label?: string
+    helperText?: string
+    required?: boolean
+    placeHolder?: string
+    rows?: number
+    options?: string[]
+
+    ordering: number
+
+    answers?: Answer[]
+}
+
+
+export type Answer = {
+    id: number
+    submissionId: number
+    questionId: string
+    answerText?: string
+    choiceId?: number
 }
 
 export type SubmitFunction = (key: string, value: string) => void
@@ -34,7 +57,7 @@ export type SubmitFunction = (key: string, value: string) => void
 export type FormElement = {
     type: ElementsType
 
-    construct: (id: string) => FormElementInstance
+    construct: (id: string, formId: number, ordering: number) => FormElementInstance
 
     designerButtonElement: {
         icon: React.ElementType,

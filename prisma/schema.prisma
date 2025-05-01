@@ -21,22 +21,55 @@ model Form {
   published   Boolean  @default(false)
   name        String
   description String   @default("")
-  content     String   @default("[]")
 
   visits      Int @default(0)
   submissions Int @default(0)
 
   shareURL        String            @unique @default(uuid())
+  questions       Question[]
   FormSubmissions FormSubmissions[]
 
   @@unique([name, userId])
 }
 
-model FormSubmissions {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  formId    Int
-  form      Form     @relation(fields: [formId], references: [id])
+model Question {
+  id     String @id
+  formId Int
+  type   String
 
-  content String
+  title       String?
+  text        String?
+  height      Int?
+  label       String?
+  helperText  String?
+  required    Boolean?
+  placeHolder String?
+  rows        Int?
+  options     String[]
+
+  ordering Int
+
+  form    Form     @relation(fields: [formId], references: [id])
+  answers Answer[]
+}
+
+model FormSubmissions {
+  id              Int      @id @default(autoincrement())
+  createdAt       DateTime @default(now())
+  formId          Int
+  submittedUserId String
+
+  form Form @relation(fields: [formId], references: [id])
+
+  answers Answer[]
+}
+
+model Answer {
+  id           Int     @id @default(autoincrement())
+  submissionId Int
+  questionId   String
+  answerText   String?
+
+  formSubmissions FormSubmissions @relation(fields: [submissionId], references: [id])
+  question        Question        @relation(fields: [questionId], references: [id])
 }

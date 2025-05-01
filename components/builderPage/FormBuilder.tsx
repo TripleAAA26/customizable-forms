@@ -1,14 +1,17 @@
 'use client'
 
-import { Form } from '@prisma/client'
+import { Form, Prisma } from '@prisma/client'
+type FormWithQuestions = Prisma.FormGetPayload<{
+    include: { questions: true }
+}>
 import { DndContext, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core'
 import { useEffect, useState } from 'react'
 
-import PreviewDialogButton from '@/components/PreviewDialogButton'
-import SaveFormButton from '@/components/SaveFormButton'
-import PublishFormButton from '@/components/PublishFormButton'
-import Designer from '@/components/Designer'
-import DragOverlayWrapper from '@/components/DragOverlayWrapper'
+import PreviewDialogButton from '@/components/builderPage/PreviewDialogButton'
+import SaveFormButton from '@/components/builderPage/SaveFormButton'
+import PublishFormButton from '@/components/builderPage/PublishFormButton'
+import Designer from '@/components/builderPage/Designer'
+import DragOverlayWrapper from '@/components/builderPage/DragOverlayWrapper'
 import useDesigner from '@/components/hooks/useDesigner'
 import { ImSpinner2 } from 'react-icons/im'
 import { Input } from '@/components/ui/input'
@@ -17,10 +20,13 @@ import { toast } from 'sonner'
 import Link from 'next/link'
 import { BsArrowLeft, BsArrowRight } from 'react-icons/bs'
 import Confetti from 'react-confetti'
+import { FormElementInstance } from '@/components/FormElements'
+import { useTranslations } from 'next-intl'
 
-export default function FormBuilder({ form }: { form: Form }) {
+export default function FormBuilder({ form }: { form: FormWithQuestions }) {
     const { setElements, setSelectedElement } = useDesigner()
     const [isReady, setIsReady] = useState(false)
+    const t = useTranslations('BuilderPage.formBuilderComponent')
 
     const mouseSensor = useSensor(MouseSensor, {
         activationConstraint: {
@@ -39,7 +45,7 @@ export default function FormBuilder({ form }: { form: Form }) {
 
     useEffect(() => {
         if (isReady) return
-        const elements = JSON.parse(form.content)
+        const elements = form.questions as FormElementInstance[]
         setElements(elements)
         setSelectedElement(null)
         const readyTimeout = setTimeout(() => setIsReady(true), 500)
@@ -69,13 +75,13 @@ export default function FormBuilder({ form }: { form: Form }) {
                 <div className='flex flex-col items-center justify-center w-full h-full'>
                     <div className='max-w-md'>
                         <h1 className='text-center text-4xl font-bold text-primary border-b pb-2 mb-10'>
-                            🎉Form published🎉
+                            🎉{t('form-published')}🎉
                         </h1>
                         <h2 className='text-2xl'>
-                            Share this form
+                            {t('share-from')}
                         </h2>
                         <h3 className='text-xl text-muted-foreground border-b pb-10'>
-                            Anyone with the link can view and submit the form
+                            {t('share-description')}
                         </h3>
                         <div className='my-4 flex flex-col items-center w-full border-b pb-4'>
                             <Input className='w-full' readOnly value={shareUrl} />
@@ -86,19 +92,19 @@ export default function FormBuilder({ form }: { form: Form }) {
                                     toast.success('Copied!', { description: 'Link copied to clipboard' })
                                 }}
                             >
-                                Copy link
+                                {t('copy-link-button')}
                             </Button>
                         </div>
                         <div className='flex justify-between'>
                             <Button asChild variant='link'>
                                 <Link href='/' className='gap-2'>
                                     <BsArrowLeft />
-                                    Go back home
+                                    {t('back-home-button')}
                                 </Link>
                             </Button>
                             <Button asChild variant='link'>
                                 <Link href={`/forms/${form.id}`} className='gap-2'>
-                                    Form details
+                                    {t('form-details-button')}
                                     <BsArrowRight />
                                 </Link>
                             </Button>
@@ -114,7 +120,7 @@ export default function FormBuilder({ form }: { form: Form }) {
             <main className='flex flex-col w-full'>
                 <nav className='flex justify-between items-center border-b-2 p-4 gap-3'>
                     <h2 className='truncate font-medium'>
-                        <span className='text-muted-foreground mr-2'>Form:</span>
+                        <span className='text-muted-foreground mr-2'>{t('form')}:</span>
                         {form.name}
                     </h2>
                     <div className='flex items-center gap-2'>
@@ -131,7 +137,7 @@ export default function FormBuilder({ form }: { form: Form }) {
                     className='flex flex-grow w-full items-center justify-center relative overflow-y-auto bg-accent
                     h-[200px] bg-[url(/tiny-checkers.svg)] dark:bg-[url(/tiny-checkers-dark.svg)]'
                 >
-                    <Designer/>
+                    <Designer formId={form.id} />
                 </div>
             </main>
             <DragOverlayWrapper />

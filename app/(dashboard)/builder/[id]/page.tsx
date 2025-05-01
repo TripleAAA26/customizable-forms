@@ -1,5 +1,5 @@
 import { GetFormById } from '@/actions/form'
-import FormBuilder from '@/components/FormBuilder'
+import FormBuilder from '@/components/builderPage/FormBuilder'
 
 export default async function BuilderPage({ params }: { params: { id: string } }) {
     const { id } = await params

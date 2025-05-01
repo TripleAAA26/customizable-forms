@@ -1,8 +1,8 @@
 import { GetFormById } from '@/actions/form'
-import VisitButton from '@/components/VisitButton'
-import FormLinkShare from '@/components/FormLinkShare'
+import VisitButton from '@/components/formsPage/VisitButton'
+import FormLinkShare from '@/components/formsPage/FormLinkShare'
 import StatsCards from '@/components/StatsCards'
-import SubmissionsTable from '@/components/SubmissionsTable'
+import SubmissionsTable from '@/components/formsPage/SubmissionsTable'
 
 export default async function FormDetailPage({ params }: { params: { id: string } }) {
     const { id } = await params

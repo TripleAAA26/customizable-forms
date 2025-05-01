@@ -3,7 +3,8 @@ import { FormElementInstance } from '@/components/FormElements'
 import { ElementsType } from '@/components/FormElements'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { formatDistance } from 'date-fns'
-import RowCell from '@/components/RowCell'
+import RowCell from '@/components/formsPage/RowCell'
+import { getTranslations } from 'next-intl/server'
 
 
 type columnsType = {
@@ -13,14 +14,24 @@ type columnsType = {
     type: ElementsType
 }[]
 
-type RowType = { [key: string]: string } & { submittedAt: Date }
+type Answer = {
+    id: number
+    submissionId: number
+    questionId: string
+    answerText: string | null
+}[]
+type RowType = {
+    content: Answer
+    submittedAt: Date
+}
 
 export default async function SubmissionsTable({ id }: { id: number } ) {
     const form = await GetFormWithSubmissions(id)
+    const t = await getTranslations('FormsPage')
 
     if (!form) throw new Error('form not found')
 
-    const formElements = JSON.parse(form.content) as FormElementInstance[]
+    const formElements = form.questions as FormElementInstance[]
 
     const columns: columnsType = []
 
@@ -34,8 +45,8 @@ export default async function SubmissionsTable({ id }: { id: number } ) {
             case 'CheckboxField':
                 columns.push({
                     id: element.id,
-                    label: element.extraAttributes?.label,
-                    required: element.extraAttributes?.required,
+                    label: element?.label || '',
+                    required: element?.required || false,
                     type: element.type,
                 })
                 break
@@ -47,16 +58,17 @@ export default async function SubmissionsTable({ id }: { id: number } ) {
     const rows: RowType[] = []
 
     form.FormSubmissions.forEach(submission => {
-        const content = JSON.parse(submission.content)
+        const content = submission.answers
+
         rows.push({
-            ...content,
+            content,
             submittedAt: submission.createdAt,
         })
     })
 
     return (
         <div>
-            <h1 className='text-2xl font-bold my-4'>Submissions</h1>
+            <h1 className='text-2xl font-bold my-4'>{t('submissions')}</h1>
             <div className='rounded-md border'>
                 <Table>
                     <TableHeader>
@@ -75,7 +87,13 @@ export default async function SubmissionsTable({ id }: { id: number } ) {
                         {rows.map((row, index) =>
                             <TableRow key={index}>
                                 {columns.map(column =>
-                                    <RowCell key={column.id} type={column.type} value={row[column.id]} />
+                                    <RowCell
+                                        key={column.id}
+                                        type={column.type}
+                                        value={row.content.find(answer =>
+                                            answer.questionId === column.id
+                                        )?.answerText as string}
+                                    />
                                 )}
                                 <TableCell className='text-muted-foreground text-right'>
                                     {formatDistance(row.submittedAt, new Date(), { addSuffix: true })}

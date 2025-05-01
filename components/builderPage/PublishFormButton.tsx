@@ -1,3 +1,5 @@
+'use client'
+
 import { useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { MdOutlinePublish } from 'react-icons/md'
@@ -17,8 +19,10 @@ import {
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 import { PublishForm } from '@/actions/form'
+import { useTranslations } from 'next-intl'
 
 export default function PublishFormButton({ id }: { id: number }) {
+    const t = useTranslations('BuilderPage.publishFormButtonComponent')
     const [loading, startTransition] = useTransition()
     const router = useRouter()
 
@@ -37,22 +41,21 @@ export default function PublishFormButton({ id }: { id: number }) {
             <AlertDialogTrigger asChild>
                 <Button className='gap-2 text-white bg-gradient-to-r from-blue-400 to-green-400'>
                     <MdOutlinePublish className='!h-4 !w-4' />
-                    Publish
+                    {t('dialog-trigger')}
                 </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
                 <AlertDialogHeader>
-                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                    <AlertDialogTitle>{t('dialog-title')}</AlertDialogTitle>
                     <AlertDialogDescription>
-                        This action cannot be undone. After publishing you will not be able to edit this form. <br/> <br/>
+                        {t('dialog-description-first')} <br/> <br/>
                         <span className='font-medium'>
-                            By publishing this form you will make it available to the public
-                            and you will be able to collect submission.
+                            {t('dialog-description-second')}
                         </span>
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogCancel>{t('dialog-cancel')}</AlertDialogCancel>
                     <AlertDialogAction
                         disabled={loading}
                         onClick={e => {
@@ -60,7 +63,7 @@ export default function PublishFormButton({ id }: { id: number }) {
                             startTransition(publishForm)
                         }}
                     >
-                        Proceed
+                        {t('dialog-action-proceed')}
                         {loading && <FaSpinner className='animate-spin' />}
                     </AlertDialogAction>
                 </AlertDialogFooter>

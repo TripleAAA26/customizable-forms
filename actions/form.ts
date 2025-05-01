@@ -3,6 +3,8 @@
 import { currentUser } from '@clerk/nextjs/server'
 import prismadb from '@/lib/prismadb'
 import { formSchema, formSchemaType } from '@/schemas/form'
+import { FormElementInstance } from '@/components/FormElements'
+import { Question } from '@prisma/client'
 
 class CustomError extends Error {}
 
@@ -90,25 +92,31 @@ export async function GetFormById(id: number) {
         where: {
             userId: user.id,
             id
+        },
+        include: {
+            questions: true
         }
     })
 }
 
-export async function UpdateFormContent(id: number, jsonContent: string) {
+
+export async function UpdateFormContent(id: number, elements: FormElementInstance[]) {
     const user = await currentUser()
     if (!user) {
         throw new CustomError('User not found')
     }
 
-    return await prismadb.form.update({
-        where: {
-            userId: user.id,
-            id,
-        },
-        data: {
-            content: jsonContent
-        }
-    })
+    return await Promise.all(
+        elements.map(element =>
+            prismadb.question.upsert({
+                where: {
+                    id: element.id
+                },
+                update: element as Question,
+                create: element as Question,
+            })
+        )
+    )
 }
 
 export async function PublishForm(id: number) {
@@ -136,7 +144,8 @@ export async function GetFormContentByUrl(formUrl: string) {
 
     return await prismadb.form.update({
         select: {
-            content: true,
+            id: true,
+            questions: true,
         },
         data: {
             visits: {
@@ -149,27 +158,39 @@ export async function GetFormContentByUrl(formUrl: string) {
     })
 }
 
-export async function SubmitForm(formUrl: string, content: string ) {
+export async function SubmitForm(formId: number, formUrl: string, content: [string, string][] ) {
     const user = await currentUser()
     if (!user) {
         throw new CustomError('User not found')
     }
 
+    const answers = content.map(answer => {
+        return {
+            questionId: answer[0],
+            answerText: answer[1],
+        }
+    })
+
     return await prismadb.form.update({
+        where: {
+            shareURL: formUrl,
+            published: true,
+        },
         data: {
             submissions: {
                 increment: 1
             },
             FormSubmissions: {
                 create: {
-                    content
+                    submittedUserId: user.id,
+                    answers: {
+                        createMany: {
+                            data: answers
+                        }
+                    }
                 }
             }
         },
-        where: {
-            shareURL: formUrl,
-            published: true,
-        }
     })
 }
 
@@ -185,7 +206,12 @@ export async function GetFormWithSubmissions(id: number) {
             id
         },
         include: {
-            FormSubmissions: true
+            questions: true,
+            FormSubmissions: {
+                include: {
+                    answers: true
+                }
+            }
         }
     })
 }

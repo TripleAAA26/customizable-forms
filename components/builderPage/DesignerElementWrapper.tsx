@@ -6,11 +6,13 @@ import { cn } from '@/lib/utils'
 import { FormElementInstance, FormElements } from '@/components/FormElements'
 import { Button } from '@/components/ui/button'
 import useDesigner from '@/components/hooks/useDesigner'
+import { useTranslations } from 'next-intl'
 
 
 export default function DesignerElementWrapper({ element }: { element: FormElementInstance }) {
     const { removeElement, selectedElement, setSelectedElement } = useDesigner()
     const [mouseIsOver, setMouseIsOver] = useState<boolean>(false)
+    const t = useTranslations('BuilderPage.designerElementWrapperComponent')
 
     const topHalf = useDroppable({
         id: element.id + '-top',
@@ -81,7 +83,7 @@ export default function DesignerElementWrapper({ element }: { element: FormEleme
                     </div>
                     <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-pulse'>
                         <p className='text-muted-foreground text-sm'>
-                            Click for properties or drag to move
+                            {t('over-text')}
                         </p>
                     </div>
                 </>

@@ -1,8 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { toast } from 'sonner'
-import { ChevronDown, Lock, LockOpen, Trash2 } from 'lucide-react'
+
 import {
     ColumnDef,
     ColumnFiltersState,
@@ -15,12 +14,7 @@ import {
     getSortedRowModel,
     useReactTable,
 } from '@tanstack/react-table'
-import {
-    DropdownMenu,
-    DropdownMenuCheckboxItem,
-    DropdownMenuContent,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+
 import {
     Table,
     TableBody,
@@ -32,7 +26,8 @@ import {
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { UserList } from '@/components/adminPage/columns'
-import { activateUser, blockUser, deleteUser } from '@/actions/admin_actions'
+import { useTranslations } from 'next-intl'
+
 
 
 interface DataTableProps<TData, TValue> {
@@ -45,6 +40,7 @@ export function DataTable<TData extends UserList, TValue>({ columns, data }: Dat
     const [ columnFilters, setColumnFilters ] = useState<ColumnFiltersState>([])
     const [ columnVisibility, setColumnVisibility ] = useState<VisibilityState>({})
     const [ rowSelection, setRowSelection ] = useState({})
+    const t = useTranslations('AdminPage')
 
     const table = useReactTable({
         data,
@@ -65,87 +61,18 @@ export function DataTable<TData extends UserList, TValue>({ columns, data }: Dat
         },
     })
 
-    const selectedIds = table.getSelectedRowModel().rows.map(item => item.original.id)
-
-    async function handleActive() {
-        if (selectedIds.length === 0) return
-        //await activateUser(selectedIds[0])
-        setRowSelection({})
-        toast.success('Users activated')
-    }
-
-    async function handleBlock() {
-        if (selectedIds.length === 0) return
-        await blockUser(selectedIds[0])
-        //setRowSelection({})
-        toast.success('Users blocked')
-    }
-
-    async function handleDelete() {
-        if (selectedIds.length === 0) return
-        //await deleteUser(selectedIds)
-        setRowSelection({})
-        toast.success('Users deleted')
-    }
 
     return (
         <div className='w-full'>
             <div className='flex items-center py-4 gap-4'>
-                <div className='flex items-center space-x-2'>
-                    <Button
-                        variant='outline'
-                        onClick={handleBlock}
-                    >
-                        <Lock className='h-4 w-4'/>
-                        Block
-                    </Button>
-                    <Button
-                        variant='outline'
-                        onClick={handleActive}
-                    >
-                        <LockOpen className='h-4 w-4'/>
-                    </Button>
-                    <Button
-                        variant='destructive'
-                        onClick={handleDelete}
-                    >
-                        <Trash2 className='h-4 w-4'/>
-                    </Button>
-                </div>
                 <Input
-                    placeholder='Filter emails...'
+                    placeholder={t('filter')}
                     value={(table.getColumn('email')?.getFilterValue() as string) ?? ''}
                     onChange={(event) =>
                         table.getColumn('email')?.setFilterValue(event.target.value)
                     }
-                    className='max-w-sm ml-auto'
+                    className='max-w-sm'
                 />
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant='outline' className='ml-auto'>
-                            Columns <ChevronDown/>
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align='end'>
-                        {table
-                            .getAllColumns()
-                            .filter((column) => column.getCanHide())
-                            .map((column) => {
-                                return (
-                                    <DropdownMenuCheckboxItem
-                                        key={column.id}
-                                        className='capitalize'
-                                        checked={column.getIsVisible()}
-                                        onCheckedChange={(value) =>
-                                            column.toggleVisibility(!!value)
-                                        }
-                                    >
-                                        {column.id}
-                                    </DropdownMenuCheckboxItem>
-                                )
-                            })}
-                    </DropdownMenuContent>
-                </DropdownMenu>
             </div>
             <div className='rounded-md border'>
                 <Table>
@@ -190,7 +117,7 @@ export function DataTable<TData extends UserList, TValue>({ columns, data }: Dat
                                     colSpan={columns.length}
                                     className='h-24 text-center'
                                 >
-                                    No results.
+                                    {t('empty-table')}
                                 </TableCell>
                             </TableRow>
                         )}
@@ -198,10 +125,6 @@ export function DataTable<TData extends UserList, TValue>({ columns, data }: Dat
                 </Table>
             </div>
             <div className='flex items-center justify-end space-x-2 py-4'>
-                <div className='flex-1 text-sm text-muted-foreground'>
-                    {table.getFilteredSelectedRowModel().rows.length} of{' '}
-                    {table.getFilteredRowModel().rows.length} row(s) selected.
-                </div>
                 <div className='space-x-2'>
                     <Button
                         variant='outline'
@@ -209,7 +132,7 @@ export function DataTable<TData extends UserList, TValue>({ columns, data }: Dat
                         onClick={() => table.previousPage()}
                         disabled={!table.getCanPreviousPage()}
                     >
-                        Previous
+                        {t('button-prev')}
                     </Button>
                     <Button
                         variant='outline'
@@ -217,7 +140,7 @@ export function DataTable<TData extends UserList, TValue>({ columns, data }: Dat
                         onClick={() => table.nextPage()}
                         disabled={!table.getCanNextPage()}
                     >
-                        Next
+                        {t('button-next')}
                     </Button>
                 </div>
             </div>

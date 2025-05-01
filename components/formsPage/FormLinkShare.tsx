@@ -6,16 +6,17 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { ImShare } from 'react-icons/im'
 import { toast } from 'sonner'
+import { useTranslations } from 'next-intl'
 
 export default function FormLinkShare({shareUrl}: {shareUrl: string}) {
     const [mounted, setMounted] = useState<boolean>(false)
+    const t = useTranslations('FormsPage')
 
     useEffect(() => {
         setMounted(true)
     }, [])
 
     if (!mounted) return null
-
     const shareLink = `${window.location.origin}/submit/${shareUrl}`
 
     return (
@@ -29,7 +30,7 @@ export default function FormLinkShare({shareUrl}: {shareUrl: string}) {
                 }}
             >
                 <ImShare className='mr-2 !h-4 !w-4' />
-                Share link
+                {t('share-link-button')}
             </Button>
         </div>
     )

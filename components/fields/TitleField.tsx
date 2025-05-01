@@ -11,12 +11,10 @@ import { ElementsType, FormElement, FormElementInstance } from '@/components/For
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { useTranslations } from 'next-intl'
 
 const type: ElementsType = 'TitleField'
 
-const extraAttributes = {
-    title: 'Title field',
-}
 
 const propertiesSchema = z.object({
     title: z.string().min(2).max(50),
@@ -24,10 +22,12 @@ const propertiesSchema = z.object({
 
 export const TitleFieldFormElement: FormElement = {
     type,
-    construct: (id: string) => ({
+    construct: (id: string, formId: number, ordering: number) => ({
         id,
         type,
-        extraAttributes,
+        formId,
+        ordering,
+        title: 'Title field',
     }),
     designerButtonElement: {
         icon: LuHeading1,
@@ -40,18 +40,15 @@ export const TitleFieldFormElement: FormElement = {
     validate: () => true,
 }
 
-type CustomInstance = FormElementInstance & {
-    extraAttributes: typeof extraAttributes
-}
 
 function DesignerComponent({ elementInstance }: { elementInstance: FormElementInstance }) {
-    const element = elementInstance as CustomInstance
-    const { title } = element.extraAttributes
+    const { title } = elementInstance
+    const t = useTranslations('Fields')
 
     return (
         <div className='flex flex-col w-full gap-2'>
             <Label className='text-muted-foreground'>
-                Title field
+                {t('Title field')}
             </Label>
             <p className='text-xl'>{title}</p>
         </div>
@@ -60,9 +57,8 @@ function DesignerComponent({ elementInstance }: { elementInstance: FormElementIn
 
 
 function FormComponent({ elementInstance }: { elementInstance: FormElementInstance }) {
-    const element = elementInstance as CustomInstance
+    const { title } = elementInstance
 
-    const { title } = element.extraAttributes
 
     return (
         <p className='text-xl'>{title}</p>
@@ -73,27 +69,27 @@ function FormComponent({ elementInstance }: { elementInstance: FormElementInstan
 type propertiesFormSchemaType = z.infer<typeof propertiesSchema>
 
 function PropertiesComponent({ elementInstance }: { elementInstance: FormElementInstance }) {
-    const element = elementInstance as CustomInstance
     const { updateElement } = useDesigner()
+    const t = useTranslations('Fields.propertiesComponent')
 
     const form = useForm<propertiesFormSchemaType>({
         resolver: zodResolver(propertiesSchema),
         mode: 'onBlur',
         defaultValues: {
-            title: element.extraAttributes.title,
+            title: elementInstance.title,
         }
     })
 
     useEffect(() => {
-        form.reset(element.extraAttributes)
-    },[element, form])
+        form.reset({
+            title: elementInstance.title,
+        })
+    },[elementInstance, form])
 
     function applyChanges(values: propertiesFormSchemaType) {
-        updateElement(element.id, {
-            ...element,
-            extraAttributes: {
-                ...values,
-            }
+        updateElement(elementInstance.id, {
+            ...elementInstance,
+            ...values,
         })
     }
 
@@ -110,7 +106,7 @@ function PropertiesComponent({ elementInstance }: { elementInstance: FormElement
                     render={({field}) =>
                         <FormItem>
                             <FormLabel>
-                                Title
+                                {t('form-title')}
                             </FormLabel>
                             <FormControl>
                                 <Input

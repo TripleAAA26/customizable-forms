@@ -3,10 +3,11 @@
 import { useEffect, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
+import { useTranslations } from 'next-intl'
 
 export default function VisitButton({shareUrl}: {shareUrl: string}) {
     const [mounted, setMounted] = useState<boolean>(false)
-
+    const t = useTranslations('FormsPage')
     useEffect(() => {
         setMounted(true)
     }, [])
@@ -20,7 +21,7 @@ export default function VisitButton({shareUrl}: {shareUrl: string}) {
             className='w-[200px]'
             onClick={() => window.open(shareLink, '_blank')}
         >
-            Visit
+            {t('visit-button')}
         </Button>
     )
 }

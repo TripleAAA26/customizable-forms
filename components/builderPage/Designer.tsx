@@ -3,14 +3,16 @@
 import { DragEndEvent, useDndMonitor, useDroppable } from '@dnd-kit/core'
 
 import { cn } from '@/lib/utils'
-import DesignerSideBar from '@/components/DesignerSideBar'
+import DesignerSideBar from '@/components/builderPage/DesignerSideBar'
 import useDesigner from '@/components/hooks/useDesigner'
 import { ElementsType, FormElements } from '@/components/FormElements'
 import { idGenerator } from '@/lib/idGenerator'
-import DesignerElementWrapper from '@/components/DesignerElementWrapper'
+import DesignerElementWrapper from '@/components/builderPage/DesignerElementWrapper'
+import { useTranslations } from 'next-intl'
 
 
-export default function Designer() {
+export default function Designer({ formId }: { formId: number }) {
+    const t = useTranslations('BuilderPage.designerComponent')
     const { elements, addElement, selectedElement, setSelectedElement, removeElement } = useDesigner()
 
     const droppable = useDroppable({
@@ -32,7 +34,9 @@ export default function Designer() {
             if (isDesignerButtonElement && isDroppingOverDesignerDropArea) {
                 const type = active.data?.current?.type
                 const newElement = FormElements[type as ElementsType].construct(
-                    idGenerator()
+                    idGenerator(),
+                    formId,
+                    elements.length,
                 )
                 addElement(elements.length, newElement)
                 return
@@ -44,9 +48,6 @@ export default function Designer() {
             // Second scenario: dropping a sidebar button element over the designer element
             if (isDesignerButtonElement && (isDroppingOverDesignerElementTopHalf || isDroppingOverDesignerElementBottomHalf)) {
                 const type = active.data?.current?.type
-                const newElement = FormElements[type as ElementsType].construct(
-                    idGenerator()
-                )
 
                 const overElementIndex = elements.findIndex(el =>
                     el.id === over.data?.current?.elementId
@@ -59,6 +60,12 @@ export default function Designer() {
                 if (isDroppingOverDesignerElementBottomHalf) {
                     indexForNewElement = overElementIndex + 1
                 }
+
+                const newElement = FormElements[type as ElementsType].construct(
+                    idGenerator(),
+                    formId,
+                    elements.length,
+                )
 
                 addElement(indexForNewElement, newElement)
                 return
@@ -89,7 +96,7 @@ export default function Designer() {
                 if (isDroppingOverDesignerElementBottomHalf) {
                     indexForNewElement = overElementIndex + 1
                 }
-
+                activeElement.ordering = indexForNewElement
                 addElement(indexForNewElement, activeElement)
             }
         }
@@ -112,7 +119,7 @@ export default function Designer() {
                 >
                     {!droppable.isOver && elements.length === 0 &&
                         <p className='text-3xl text-muted-foreground font-bold flex flex-grow items-center'>
-                            Drop here
+                            {t('drop-here')}
                         </p>
                     }
                     {droppable.isOver && elements.length === 0 &&

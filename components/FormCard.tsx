@@ -8,8 +8,10 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { BiRightArrowAlt } from 'react-icons/bi'
 import { FaEdit } from 'react-icons/fa'
+import { useTranslations } from 'next-intl'
 
 export default function FormCard({ form }: { form: Form}) {
+    const t = useTranslations('PersonalPage')
     return (
         <Card className='py-3'>
             <CardHeader>
@@ -17,8 +19,8 @@ export default function FormCard({ form }: { form: Form}) {
                     <span className='truncate font-bold'>
                         {form.name}
                     </span>
-                    {form.published && <Badge>Published</Badge>}
-                    {!form.published && <Badge variant='destructive'>Draft</Badge>}
+                    {form.published && <Badge>{t('published-badge')}</Badge>}
+                    {!form.published && <Badge variant='destructive'>{t('draft-badge')}</Badge>}
                 </CardTitle>
                 <CardDescription className='flex items-center justify-between text-sm text-muted-foreground'>
                     {formatDistance(form.createdAt, new Date(), {
@@ -41,7 +43,7 @@ export default function FormCard({ form }: { form: Form}) {
                 {form.published &&
                     <Button asChild className='w-full mt-2 text-md gap-4'>
                         <Link href={`/forms/${form.id}`}>
-                            View submissions
+                            {t('view-submissions-button')}
                             <BiRightArrowAlt />
                         </Link>
                     </Button>
@@ -49,7 +51,7 @@ export default function FormCard({ form }: { form: Form}) {
                 {!form.published &&
                     <Button variant='secondary' asChild className='w-full mt-2 text-md gap-4'>
                         <Link href={`/builder/${form.id}`}>
-                            Edit form
+                            {t('edit-form-button')}
                             <FaEdit />
                         </Link>
                     </Button>

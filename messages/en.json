@@ -1,5 +1,122 @@
 {
+  "AdminPage": {
+    "title": "Admin Dashboard",
+    "filter": "Filter emails...",
+    "button-prev": "Previous",
+    "button-next": "Next",
+    "empty-table": "No results."
+  },
   "HomePage": {
     "title": "Your forms"
+  },
+  "PersonalPage": {
+    "total-visits-title": "Total visits",
+    "total-visits-helper": "All time form visits",
+    "total-submissions-title": "Total submissions",
+    "total-submissions-helper": "All time form submissions",
+    "submission-rate-title": "Submission rate",
+    "submission-rate-helper": "Visits that result in form submission",
+    "bounce-rate-title": "Bounce rate",
+    "bounce-rate-helper": "Visits that leaves without interacting",
+    "create-form-button": "Create new form",
+    "create-dialog-title": "Create form",
+    "create-dialog-header-description": "Create a new form to start collecting responses",
+    "create-dialog-name": "Name",
+    "create-dialog-description": "Description",
+    "create-dialog-save-button": "Save",
+    "published-badge": "Published",
+    "draft-badge": "Draft",
+    "view-submissions-button": "View submissions",
+    "edit-form-button": "Edit form"
+  },
+  "BuilderPage": {
+    "formBuilderComponent": {
+      "form": "Form",
+      "form-published": "Form published",
+      "share-from": "Share this form",
+      "share-description": "Anyone with the link can view and submit the form",
+      "copy-link-button": "Copy link",
+      "back-home-button": "Go back home",
+      "form-details-button": "Form details"
+    },
+    "publishFormButtonComponent": {
+      "dialog-trigger": "Publish",
+      "dialog-title": "Are you absolutely sure?",
+      "dialog-description-first": "This action cannot be undone. After publishing you will not be able to edit this form.",
+      "dialog-description-second": "By publishing this form you will make it available to the public and you will be able to collect submission.",
+      "dialog-cancel": "Cancel",
+      "dialog-action-proceed": "Proceed"
+    },
+    "SaveFormButtonComponent": {
+      "save-button": "Save"
+    },
+    "PreviewDialogButtonComponent": {
+      "preview-button": "Preview",
+      "preview-dialog-title": "Form preview",
+      "preview-dialog-description": "This is how your form will look like to your users."
+    },
+    "designerComponent": {
+      "drop-here": "Drop here"
+    },
+    "designerElementWrapperComponent": {
+      "over-text": "Click for properties or drag to move"
+    },
+    "propertiesFormSideBarComponent": {
+      "element-properties": "Element properties"
+    },
+    "formElementsSideBarComponent": {
+      "drag-drop": "Drag and drop elements",
+      "layout-elements": "Layout elements",
+      "form-elements": "Form elements"
+    }
+  },
+  "Fields": {
+    "Checkbox field": "Checkbox field",
+    "Helper text": "Helper text",
+    "Date field": "Date field",
+    "Pick a date": "Pick a date",
+    "Number field": "Number field",
+    "Text here": "Text here",
+    "Paragraph field": "Paragraph field",
+    "Select field": "Select field",
+    "Value here": "Value here",
+    "Separator field": "Separator field",
+    "Spacer field": "Spacer field",
+    "SubTitle field": "SubTitle field",
+    "TextArea field": "TextArea field",
+    "Text field": "Text field",
+    "Title field": "Title field",
+
+
+    "propertiesComponent": {
+      "form-label": "Label",
+      "form-description-first": "The label of the field.",
+      "form-description-second": "It will be displayed above the field.",
+      "form-helper-text-label": "Helper text",
+      "form-helper-description-first": "The helper text of the field.",
+      "form-helper-description-second": "It will be displayed below the field.",
+      "form-required-label": "Required",
+      "form-required-description": "The placeholder of the field.",
+      "form-placeholder-label": "PlaceHolder",
+      "form-placeholder-description": "The placeholder of the field.",
+      "form-text": "Text",
+      "form-options-label": "Options",
+      "form-options-button": "Add",
+      "form-save-button": "Save",
+      "no-properties": "No properties for this element",
+      "form-height": "Height",
+      "form-title": "Title",
+      "form-rows": "Rows"
+    }
+  },
+  "FormsPage": {
+    "share-link-button": "Share link",
+    "visit-button": "Visit",
+    "submissions": "Submissions"
+  },
+  "SubmitPage": {
+    "submitted-title": "Form submitted",
+    "submitted-description": "Thank you for submitting the form, you can close this page.",
+    "submit-button": "Submit"
   }
 }

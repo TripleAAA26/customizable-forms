@@ -11,12 +11,10 @@ import { ElementsType, FormElement, FormElementInstance } from '@/components/For
 import { Label } from '@/components/ui/label'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
+import { useTranslations } from 'next-intl'
 
 const type: ElementsType = 'ParagraphField'
 
-const extraAttributes = {
-    text: 'Text here',
-}
 
 const propertiesSchema = z.object({
     text: z.string().min(2).max(500),
@@ -24,10 +22,12 @@ const propertiesSchema = z.object({
 
 export const ParagraphFieldFormElement: FormElement = {
     type,
-    construct: (id: string) => ({
+    construct: (id: string, formId: number, ordering: number) => ({
         id,
         type,
-        extraAttributes,
+        formId,
+        ordering,
+        text: 'Text here',
     }),
     designerButtonElement: {
         icon: BsTextParagraph,
@@ -40,13 +40,10 @@ export const ParagraphFieldFormElement: FormElement = {
     validate: () => true,
 }
 
-type CustomInstance = FormElementInstance & {
-    extraAttributes: typeof extraAttributes
-}
 
 function DesignerComponent({ elementInstance }: { elementInstance: FormElementInstance }) {
-    const element = elementInstance as CustomInstance
-    const { text } = element.extraAttributes
+    const { text } = elementInstance
+
 
     return (
         <div className='flex flex-col w-full gap-2'>
@@ -60,9 +57,8 @@ function DesignerComponent({ elementInstance }: { elementInstance: FormElementIn
 
 
 function FormComponent({ elementInstance }: { elementInstance: FormElementInstance }) {
-    const element = elementInstance as CustomInstance
 
-    const { text } = element.extraAttributes
+    const { text } = elementInstance
 
     return (
         <p>{text}</p>
@@ -73,27 +69,27 @@ function FormComponent({ elementInstance }: { elementInstance: FormElementInstan
 type propertiesFormSchemaType = z.infer<typeof propertiesSchema>
 
 function PropertiesComponent({ elementInstance }: { elementInstance: FormElementInstance }) {
-    const element = elementInstance as CustomInstance
     const { updateElement } = useDesigner()
+    const t = useTranslations('Fields.propertiesComponent')
 
     const form = useForm<propertiesFormSchemaType>({
         resolver: zodResolver(propertiesSchema),
         mode: 'onBlur',
         defaultValues: {
-            text: element.extraAttributes.text,
+            text: elementInstance.text,
         }
     })
 
     useEffect(() => {
-        form.reset(element.extraAttributes)
-    },[element, form])
+        form.reset({
+            text: elementInstance.text,
+        })
+    },[elementInstance, form])
 
     function applyChanges(values: propertiesFormSchemaType) {
-        updateElement(element.id, {
-            ...element,
-            extraAttributes: {
-                ...values,
-            }
+        updateElement(elementInstance.id, {
+            ...elementInstance,
+            ...values,
         })
     }
 
@@ -110,7 +106,7 @@ function PropertiesComponent({ elementInstance }: { elementInstance: FormElement
                     render={({field}) =>
                         <FormItem>
                             <FormLabel>
-                                Text
+                                {t('form-text')}
                             </FormLabel>
                             <FormControl>
                                 <Textarea
