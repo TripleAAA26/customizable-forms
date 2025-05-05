@@ -28,6 +28,8 @@ model Form {
   shareURL        String            @unique @default(uuid())
   questions       Question[]
   FormSubmissions FormSubmissions[]
+  comments        Comment[]
+  likes           Like[]
 
   @@unique([name, userId])
 }
@@ -72,4 +74,23 @@ model Answer {
 
   formSubmissions FormSubmissions @relation(fields: [submissionId], references: [id])
   question        Question        @relation(fields: [questionId], references: [id])
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  formId    Int
+  userId    String
+  userName  String
+  text      String
+  createdAt DateTime @default(now())
+
+  form Form @relation(fields: [formId], references: [id])
+}
+
+model Like {
+  id     Int    @id @default(autoincrement())
+  formId Int
+  userId String
+
+  form Form @relation(fields: [formId], references: [id])
 }

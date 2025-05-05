@@ -5,6 +5,7 @@ import prismadb from '@/lib/prismadb'
 import { formSchema, formSchemaType } from '@/schemas/form'
 import { FormElementInstance } from '@/components/FormElements'
 import { Question } from '@prisma/client'
+import { revalidatePath } from 'next/cache'
 
 class CustomError extends Error {}
 
@@ -94,7 +95,9 @@ export async function GetFormById(id: number) {
             id
         },
         include: {
-            questions: true
+            questions: true,
+            comments: true,
+            likes: true,
         }
     })
 }
@@ -214,4 +217,57 @@ export async function GetFormWithSubmissions(id: number) {
             }
         }
     })
+}
+
+export async function AddComment(id: number, text: string) {
+    const user = await currentUser()
+    if (!user) {
+        throw new CustomError('User not found')
+    }
+
+    try {
+        await prismadb.comment.create({
+            data: {
+                userId: user.id,
+                userName: user.firstName || '',
+                formId: id,
+                text: text,
+            }
+        })
+        revalidatePath('/forms')
+
+        return { message: 'ok' }
+
+    } catch (error) {
+        return { message: error }
+    }
+}
+
+export async function AddLike(formId: number, userId: string) {
+    const user = await currentUser()
+    if (!user) {
+        throw new CustomError('User not found')
+    }
+
+    await prismadb.like.create({
+        data: {
+            formId,
+            userId,
+        }
+    })
+    revalidatePath('/forms')
+}
+
+export async function DeleteLike(id: number) {
+    const user = await currentUser()
+    if (!user) {
+        throw new CustomError('User not found')
+    }
+
+    await prismadb.like.delete({
+        where: {
+            id
+        }
+    })
+    revalidatePath('/forms')
 }

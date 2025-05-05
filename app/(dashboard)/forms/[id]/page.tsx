@@ -3,6 +3,8 @@ import VisitButton from '@/components/formsPage/VisitButton'
 import FormLinkShare from '@/components/formsPage/FormLinkShare'
 import StatsCards from '@/components/StatsCards'
 import SubmissionsTable from '@/components/formsPage/SubmissionsTable'
+import Comments from '@/components/formsPage/Comments'
+import Likes from '@/components/formsPage/Likes'
 
 export default async function FormDetailPage({ params }: { params: { id: string } }) {
     const { id } = await params
@@ -11,7 +13,7 @@ export default async function FormDetailPage({ params }: { params: { id: string 
         throw new Error(`form not found`)
     }
 
-    const { visits, submissions } = form
+    const { visits, submissions, comments } = form
 
     let submissionRate = 0
 
@@ -25,7 +27,10 @@ export default async function FormDetailPage({ params }: { params: { id: string 
         <>
             <div className='py-10 border-t border-b border-muted container'>
                 <div className='flex justify-between container'>
-                    <h1 className='text-4xl font-bold truncate'>{form.name}</h1>
+                    <div className='flex items-center gap-8'>
+                        <h1 className='text-4xl font-bold truncate'>{form.name}</h1>
+                        <Likes likes={form.likes} formId={form.id} userId={form.userId} />
+                    </div>
                     <VisitButton shareUrl={form.shareURL}/>
                 </div>
             </div>
@@ -47,6 +52,9 @@ export default async function FormDetailPage({ params }: { params: { id: string 
             </div>
             <div className='container pt-10'>
                 <SubmissionsTable id={form.id} />
+            </div>
+            <div className='container pt-10'>
+                <Comments comments={comments} formId={form.id} />
             </div>
         </>
     )
