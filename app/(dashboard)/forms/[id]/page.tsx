@@ -1,10 +1,12 @@
 import { GetFormById } from '@/actions/form'
 import VisitButton from '@/components/formsPage/VisitButton'
 import FormLinkShare from '@/components/formsPage/FormLinkShare'
-import StatsCards from '@/components/StatsCards'
+import StatsCards from '@/components/personalPage/StatsCards'
 import SubmissionsTable from '@/components/formsPage/SubmissionsTable'
 import Comments from '@/components/formsPage/Comments'
 import Likes from '@/components/formsPage/Likes'
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 
 export default async function FormDetailPage({ params }: { params: { id: string } }) {
     const { id } = await params
@@ -31,7 +33,14 @@ export default async function FormDetailPage({ params }: { params: { id: string 
                         <h1 className='text-4xl font-bold truncate'>{form.name}</h1>
                         <Likes likes={form.likes} formId={form.id} userId={form.userId} />
                     </div>
+                    <div className='flex items-center gap-8'>
+                        <Button asChild variant='outline'>
+                            <Link href='/personal'>
+                                Personal page
+                            </Link>
+                        </Button>
                     <VisitButton shareUrl={form.shareURL}/>
+                    </div>
                 </div>
             </div>
             <div className='py-4 border-b border-muted container'>

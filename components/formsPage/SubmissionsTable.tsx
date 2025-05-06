@@ -16,6 +16,7 @@ type columnsType = {
 
 type Answer = {
     id: number
+    formId: number
     submissionId: number
     questionId: string
     answerText: string | null

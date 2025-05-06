@@ -9,19 +9,14 @@ import { useEffect, useState } from 'react'
 
 import PreviewDialogButton from '@/components/builderPage/PreviewDialogButton'
 import SaveFormButton from '@/components/builderPage/SaveFormButton'
-import PublishFormButton from '@/components/builderPage/PublishFormButton'
 import Designer from '@/components/builderPage/Designer'
 import DragOverlayWrapper from '@/components/builderPage/DragOverlayWrapper'
 import useDesigner from '@/components/hooks/useDesigner'
 import { ImSpinner2 } from 'react-icons/im'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { toast } from 'sonner'
-import Link from 'next/link'
-import { BsArrowLeft, BsArrowRight } from 'react-icons/bs'
-import Confetti from 'react-confetti'
 import { FormElementInstance } from '@/components/FormElements'
 import { useTranslations } from 'next-intl'
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 
 export default function FormBuilder({ form }: { form: FormWithQuestions }) {
     const { setElements, setSelectedElement } = useDesigner()
@@ -61,60 +56,6 @@ export default function FormBuilder({ form }: { form: FormWithQuestions }) {
     }
 
 
-    const shareUrl = `${window.location.origin}/submit/${form.shareURL}`
-
-    if (form.published) {
-        return (
-            <>
-                <Confetti
-                    width={window.innerWidth}
-                    height={window.innerHeight}
-                    recycle={false}
-                    numberOfPieces={1000}
-                />
-                <div className='flex flex-col items-center justify-center w-full h-full'>
-                    <div className='max-w-md'>
-                        <h1 className='text-center text-4xl font-bold text-primary border-b pb-2 mb-10'>
-                            🎉{t('form-published')}🎉
-                        </h1>
-                        <h2 className='text-2xl'>
-                            {t('share-from')}
-                        </h2>
-                        <h3 className='text-xl text-muted-foreground border-b pb-10'>
-                            {t('share-description')}
-                        </h3>
-                        <div className='my-4 flex flex-col items-center w-full border-b pb-4'>
-                            <Input className='w-full' readOnly value={shareUrl} />
-                            <Button
-                                className='mt-2 w-full'
-                                onClick={() => {
-                                    navigator.clipboard.writeText(shareUrl)
-                                    toast.success('Copied!', { description: 'Link copied to clipboard' })
-                                }}
-                            >
-                                {t('copy-link-button')}
-                            </Button>
-                        </div>
-                        <div className='flex justify-between'>
-                            <Button asChild variant='link'>
-                                <Link href='/' className='gap-2'>
-                                    <BsArrowLeft />
-                                    {t('back-home-button')}
-                                </Link>
-                            </Button>
-                            <Button asChild variant='link'>
-                                <Link href={`/forms/${form.id}`} className='gap-2'>
-                                    {t('form-details-button')}
-                                    <BsArrowRight />
-                                </Link>
-                            </Button>
-                        </div>
-                    </div>
-                </div>
-            </>
-        )
-    }
-
     return (
         <DndContext sensors={sensors}>
             <main className='flex flex-col w-full'>
@@ -124,13 +65,13 @@ export default function FormBuilder({ form }: { form: FormWithQuestions }) {
                         {form.name}
                     </h2>
                     <div className='flex items-center gap-2'>
+                        <Button asChild variant='outline'>
+                            <Link href='/personal'>
+                                Personal page
+                            </Link>
+                        </Button>
                         <PreviewDialogButton/>
-                        {!form.published &&
-                            <>
-                                <SaveFormButton id={form.id} />
-                                <PublishFormButton id={form.id} />
-                            </>
-                        }
+                        <SaveFormButton id={form.id} />
                     </div>
                 </nav>
                 <div

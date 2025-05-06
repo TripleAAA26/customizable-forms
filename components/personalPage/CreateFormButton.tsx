@@ -58,12 +58,11 @@ export default function CreateFormButton() {
         <Dialog>
             <DialogTrigger asChild>
                 <Button
-                    variant='outline'
-                    className='group flex flex-col justify-center items-center h-[190px]
-                    border border-primary/20 border-dashed hover:border-primary hover:cursor-pointer gap-4'
+                    variant='default'
+                    className='flex justify-center items-center hover:cursor-pointer gap-4'
                 >
-                    <BsFileEarmarkPlus className='!h-8 !w-8 text-muted-foreground group-hover:text-primary' />
-                    <p className='font-bold text-xl text-muted-foreground group-hover:text-primary'>
+                    <BsFileEarmarkPlus className='!h-4 !w-4' />
+                    <p className='font-bold text-large'>
                         {t('create-form-button')}
                     </p>
                 </Button>

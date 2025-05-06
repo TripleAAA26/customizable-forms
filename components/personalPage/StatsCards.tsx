@@ -3,7 +3,7 @@ import { FaWpforms } from 'react-icons/fa6'
 import { HiCursorClick } from 'react-icons/hi'
 import { TbArrowBounce } from 'react-icons/tb'
 import { GetFormStats } from '@/actions/form'
-import StatsCard from '@/components/StatsCard'
+import StatsCard from '@/components/personalPage/StatsCard'
 import { getTranslations } from 'next-intl/server'
 
 interface StatsCardsType {

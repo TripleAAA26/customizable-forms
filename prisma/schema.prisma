@@ -18,7 +18,6 @@ model Form {
   id          Int      @id @default(autoincrement())
   userId      String
   createdAt   DateTime @default(now())
-  published   Boolean  @default(false)
   name        String
   description String   @default("")
 
@@ -27,6 +26,7 @@ model Form {
 
   shareURL        String            @unique @default(uuid())
   questions       Question[]
+  answers         Answer[]
   FormSubmissions FormSubmissions[]
   comments        Comment[]
   likes           Like[]
@@ -71,7 +71,9 @@ model Answer {
   submissionId Int
   questionId   String
   answerText   String?
+  formId       Int
 
+  form            Form            @relation(fields: [formId], references: [id])
   formSubmissions FormSubmissions @relation(fields: [submissionId], references: [id])
   question        Question        @relation(fields: [questionId], references: [id])
 }

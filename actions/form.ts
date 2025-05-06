@@ -66,6 +66,33 @@ export async function CreateForm(data: formSchemaType) {
     return form.id
 }
 
+export async function DeleteForm(formId: number) {
+    const user = await currentUser()
+    if (!user) {
+        throw new CustomError('User not found')
+    }
+
+    const deleteForm = prismadb.form.delete({
+        where: {
+            id: formId,
+        }
+    })
+
+    const whereFormId = {
+        where: {
+            formId: formId,
+        }
+    }
+    const deleteQuestion = prismadb.question.deleteMany(whereFormId)
+    const deleteFormSubmission = prismadb.formSubmissions.deleteMany(whereFormId)
+    const deleteAnswer = prismadb.answer.deleteMany(whereFormId)
+    const deleteComment = prismadb.comment.deleteMany(whereFormId)
+    const deleteLike = prismadb.like.deleteMany(whereFormId)
+
+    await prismadb.$transaction([deleteComment, deleteLike, deleteAnswer, deleteFormSubmission, deleteQuestion, deleteForm])
+
+}
+
 export async function GetForms() {
     const user = await currentUser()
     if (!user) {
@@ -122,22 +149,6 @@ export async function UpdateFormContent(id: number, elements: FormElementInstanc
     )
 }
 
-export async function PublishForm(id: number) {
-    const user = await currentUser()
-    if (!user) {
-        throw new CustomError('User not found')
-    }
-
-    return await prismadb.form.update({
-        where: {
-            userId: user.id,
-            id,
-        },
-        data: {
-            published: true,
-        }
-    })
-}
 
 export async function GetFormContentByUrl(formUrl: string) {
     const user = await currentUser()
@@ -171,13 +182,14 @@ export async function SubmitForm(formId: number, formUrl: string, content: [stri
         return {
             questionId: answer[0],
             answerText: answer[1],
+            formId: formId,
         }
     })
 
     return await prismadb.form.update({
         where: {
             shareURL: formUrl,
-            published: true,
+            id: formId,
         },
         data: {
             submissions: {
